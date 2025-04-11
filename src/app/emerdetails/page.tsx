@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { collection, setDoc, doc } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
+import { getAuth } from "firebase/auth"; 
 import { useRouter } from "next/navigation";
-
 
 export default function EmerDetails() {
   const [contactName, setContactName] = useState("");
@@ -14,17 +14,27 @@ export default function EmerDetails() {
     e.preventDefault();
 
     try {
-        const docId = Math.random().toString(36).substring(2, 15);
-        await setDoc(doc(collection(db, "emergContact"), docId), {
-          name: contactName,
-          phone: contactPhone,
-        });
-  
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        alert("No authenticated user found. Please log in.");
+        return;
+      }
+
+      const userId = user.uid;
+
+      const emergContactRef = doc(db, "emergContact", userId);
+      await setDoc(emergContactRef, {
+        name: contactName,
+        phone: contactPhone,
+      });
+
       alert("Emergency contact saved successfully!");
       setContactName("");
       setContactPhone("");
 
-      router.push("/main"); 
+      router.push("/main");
     } catch (error) {
       console.error("Error saving emergency contact: ", error);
       alert("Failed to save emergency contact. Please try again.");

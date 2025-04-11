@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">sheild</string>
+    <string name="title_activity_main">sheild</string>
+    <string name="package_name">sheild.safety.app</string>
+    <string name="custom_url_scheme">sheild.safety.app</string>
+</resources>

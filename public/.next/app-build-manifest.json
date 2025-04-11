@@ -1,0 +1,51 @@
+{
+  "pages": {
+    "/_not-found/page": [
+      "static/chunks/webpack-8ba223b515e4ba9a.js",
+      "static/chunks/4bd1b696-18452535c1c4862d.js",
+      "static/chunks/684-af3f26308eb1d290.js",
+      "static/chunks/main-app-c02919776d66a33d.js",
+      "static/chunks/app/_not-found/page-cd1726d1b4a7e279.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack-8ba223b515e4ba9a.js",
+      "static/chunks/4bd1b696-18452535c1c4862d.js",
+      "static/chunks/684-af3f26308eb1d290.js",
+      "static/chunks/main-app-c02919776d66a33d.js",
+      "static/css/93d57f9ec46d309e.css",
+      "static/chunks/app/layout-5fa4777d57f2efd7.js"
+    ],
+    "/emerdetails/main/page": [
+      "static/chunks/webpack-8ba223b515e4ba9a.js",
+      "static/chunks/4bd1b696-18452535c1c4862d.js",
+      "static/chunks/684-af3f26308eb1d290.js",
+      "static/chunks/main-app-c02919776d66a33d.js",
+      "static/chunks/app/emerdetails/main/page-ce03202eef882396.js"
+    ],
+    "/emerdetails/page": [
+      "static/chunks/webpack-8ba223b515e4ba9a.js",
+      "static/chunks/4bd1b696-18452535c1c4862d.js",
+      "static/chunks/684-af3f26308eb1d290.js",
+      "static/chunks/main-app-c02919776d66a33d.js",
+      "static/chunks/bc9e92e6-d83e2f066c8678cf.js",
+      "static/chunks/aa35ee89-af98e4851932c3df.js",
+      "static/chunks/75-92295a50e7c9da8b.js",
+      "static/chunks/app/emerdetails/page-655c77bbf32be1dc.js"
+    ],
+    "/main/page": [
+      "static/chunks/webpack-8ba223b515e4ba9a.js",
+      "static/chunks/4bd1b696-18452535c1c4862d.js",
+      "static/chunks/684-af3f26308eb1d290.js",
+      "static/chunks/main-app-c02919776d66a33d.js",
+      "static/chunks/app/main/page-1d6fcd4e5c9d51c6.js"
+    ],
+    "/page": [
+      "static/chunks/webpack-8ba223b515e4ba9a.js",
+      "static/chunks/4bd1b696-18452535c1c4862d.js",
+      "static/chunks/684-af3f26308eb1d290.js",
+      "static/chunks/main-app-c02919776d66a33d.js",
+      "static/chunks/63-9c46f22d00ffc765.js",
+      "static/chunks/app/page-20096915c9149eb3.js"
+    ]
+  }
+}
