@@ -1,10 +1,10 @@
 "use client";
-import { handleEmergency } from "@/utils/shakeDetection"; // Import handleEmergency directly
+import { handleEmergency } from "@/utils/shakeDetection"; 
 
 export default function main() {
   const triggerEmergency = async () => {
     try {
-      await handleEmergency(); // Call the handleEmergency function
+      await handleEmergency(); 
     } catch (error) {
       console.error("Error triggering emergency:", error);
     }
