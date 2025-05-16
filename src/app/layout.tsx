@@ -8,7 +8,12 @@ export const metadata: Metadata = {
   themeColor: "#e60023",
   manifest: "/manifest.json",
   icons: {
-    apple: "../../public/icons/icon-512x512.png",
+    icon: [
+      { url: "/icons/icon-192x192.png", sizes: "192x192" },
+      { url: "/icons/icon-512x512.png", sizes: "512x512" }
+    ],
+    apple: "/icons/icon-512x512.png",
+    shortcut: "/icons/icon-192x192.png"
   },
 };
 
