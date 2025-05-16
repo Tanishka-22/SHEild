@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { collection, setDoc, doc } from "firebase/firestore";
+import { collection, setDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
 import { getAuth } from "firebase/auth"; 
 import { useRouter } from "next/navigation";
@@ -13,33 +13,56 @@ export default function EmerDetails() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!contactName || !contactPhone) {
+      alert("Please fill in all fields");
+      return;
+    }
+
     try {
       const auth = getAuth();
       const user = auth.currentUser;
 
       if (!user) {
         alert("No authenticated user found. Please log in.");
+        router.push("/auth");
         return;
       }
 
       const userId = user.uid;
+      console.log("Current user ID:", userId); // Debug log
 
+      // First update user document
+      const userRef = doc(db, "users", userId);
+      try {
+        await updateDoc(userRef, {
+          isProfileComplete: true
+        });
+        console.log("User document updated"); // Debug log
+      } catch (userError) {
+        console.error("Error updating user document:", userError);
+      }
+
+      // Then save emergency contact
       const emergContactRef = doc(db, "emergContact", userId);
-      await setDoc(emergContactRef, {
+      const emergContactData = {
         name: contactName,
         phone: contactPhone,
-      });
+        userId: userId,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      console.log("Saving emergency contact:", emergContactData); // Debug log
+
+      await setDoc(emergContactRef, emergContactData);
+      console.log("Emergency contact saved"); // Debug log
 
       alert("Emergency contact saved successfully!");
-      setContactName("");
-      setContactPhone("");
-
       router.push("/main");
-    } catch (error) {
-      console.error("Error saving emergency contact: ", error);
-      alert("Failed to save emergency contact. Please try again.");
+    } catch (error: any) {
+      console.error("Detailed error:", error); // Debug log
+      alert(`Failed to save: ${error.message}`);
     }
-  };
+};
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">

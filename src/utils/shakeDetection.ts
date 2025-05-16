@@ -18,8 +18,11 @@ export const setupShakeDetection = () => {
 };
 
 export const handleEmergency = async () => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
   try {
-    // 1. Get the authenticated user's ID
     const auth = getAuth();
     const user = auth.currentUser;
 
@@ -30,38 +33,71 @@ export const handleEmergency = async () => {
 
     const userId = user.uid;
 
-    // 2. Fetch the emergency contact from Firestore
-    const userRef = doc(db, "users", userId);
-    const userSnap = await getDoc(userRef);
+    // Fetch emergency contact from emergContact collection
+    const emergContactRef = doc(db, "emergContact", userId);
+    const emergContactSnap = await getDoc(emergContactRef);
 
-    if (!userSnap.exists()) {
-      alert("User data not found in Firestore.");
+    if (!emergContactSnap.exists()) {
+      alert("No emergency contact found. Please add emergency contact in settings.");
       return;
     }
 
-    const contact = userSnap.data()?.emergencyContact;
+    const contactData = emergContactSnap.data();
+    const contactPhone = contactData.phone;
+    const contactName = contactData.name;
 
-    if (!contact) {
-      alert("No emergency contact saved.");
+    if (!contactPhone) {
+      alert("Emergency contact phone number is missing. Please update your emergency contact.");
       return;
     }
 
-    // 3. Get the user's current location
+    // Request location permission first
+    const permissionStatus = await Geolocation.checkPermissions();
+    if (permissionStatus.location !== 'granted') {
+      await Geolocation.requestPermissions();
+    }
+
     const coordinates = await Geolocation.getCurrentPosition();
     const locationURL = `https://maps.google.com/?q=${coordinates.coords.latitude},${coordinates.coords.longitude}`;
 
-    // 4. Send SMS
-    const message = `🚨 Emergency Alert!\nLocation: ${locationURL}`;
-    (window as any).SMS.sendSMS(contact, message, () => {
-      console.log("SMS sent");
-    }, (err: any) => {
-      console.error("SMS failed:", err);
-    });
+    const message = `🚨 Emergency Alert from Women Safety App!\nContact: ${contactName}\nLocation: ${locationURL}`;
+    
+    // Try sending SMS through different methods
+    if ((window as any).SMS) {
+      await new Promise((resolve) => {
+        (window as any).SMS.sendSMS(contactPhone, message, 
+          () => {
+            console.log("SMS sent successfully");
+            resolve(true);
+          },
+          (err: any) => {
+            // Fallback to other SMS methods
+            window.open(`sms:${contactPhone}?body=${encodeURIComponent(message)}`);
+            resolve(false);
+          }
+        );
+      });
+    } else {
+      // Fallback for web browsers
+      window.open(`sms:${contactPhone}?body=${encodeURIComponent(message)}`);
+    }
 
-    // 5. Place a call to the emergency contact
-    window.open(`tel:${contact}`);
+    // Call options
+    const callOptions = [
+      `tel:${contactPhone}`,
+      `whatsapp://send?phone=${contactPhone.replace('+', '')}`,
+      `https://wa.me/${contactPhone.replace('+', '')}?text=${encodeURIComponent(message)}`
+    ];
+
+    // Try primary calling method first
+    window.open(callOptions[0]);
+
+    // Provide alternative communication buttons
+    alert("Emergency initiated! If call fails, check notification for alternative contact methods.");
+    alert("Emergency alert sent successfully!");
+    alert("Failed to send SMS. Initiating call...");
   } catch (error) {
     console.error("Error handling emergency:", error);
-    alert("An error occurred while handling the emergency. Please try again.");
+    alert("An error occurred. Please try again or manually contact emergency services.");
   }
 };

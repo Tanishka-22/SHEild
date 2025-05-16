@@ -15,13 +15,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export default function ClientLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function ClientLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    setupShakeDetection(); // Initialize shake detection globally
+    if (typeof window !== 'undefined') {
+      setupShakeDetection();
+    }
   }, []);
 
   return (
